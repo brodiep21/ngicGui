@@ -3,11 +3,13 @@ package main
 import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/widget"
+
 	// "github.com/rocketlaunchr/google-search"
 )
 
 func main() {
 	a := app.New()
+
 	w := a.NewWindow("MDS Work")
 
 	w.SetContent(widget.NewLabel(""))
