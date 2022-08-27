@@ -1,4 +1,4 @@
-package main
+package search
 
 import "testing"
 
@@ -6,7 +6,7 @@ func TestSearchTaxRate(t *testing.T) {
 	t.Run("Greeley zip returns correct value", func(t *testing.T) {
 		zip := "80634"
 		want := "7.01%"
-		got, err := searchForTaxRate(zip)
+		got, err := SearchForTaxRate(zip)
 		if err != nil {
 			t.Error(err)
 		}
@@ -18,7 +18,7 @@ func TestSearchTaxRate(t *testing.T) {
 	t.Run("LA zip returns correct value", func(t *testing.T) {
 		zip := "70650"
 		want := "9.45%"
-		got, err := searchForTaxRate(zip)
+		got, err := SearchForTaxRate(zip)
 		if err != nil {
 			t.Error(err)
 		}
