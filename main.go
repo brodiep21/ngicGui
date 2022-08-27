@@ -52,23 +52,23 @@ func main() {
 		),
 	)
 
-	win.SetContent(widget.NewLabel("Fyne System Tray"))
-
 	// win.SetContent(hBox)
 	win.SetContent(menu)
 
 	//when using the X close button, the app is only closed and minimuzed to the tray
+	win.SetContent(widget.NewLabel("Fyne System Tray"))
 	win.SetCloseIntercept(func() {
 		win.Hide()
 	})
 	win.ShowAndRun()
 }
 
+//replaces an API until a free API is available or found
 func searchForTaxRate(zipCode string) (string, error) {
 
 	search, err := googlesearch.Search(context.TODO(), "tax rate of "+zipCode)
 	if err != nil {
-		return "", err
+		return "Search error", err
 	}
 
 	for _, v := range search {
@@ -77,8 +77,8 @@ func searchForTaxRate(zipCode string) (string, error) {
 			if pos == -1 {
 				break
 			}
-			tax := v.Description[(pos - 6) : pos+1]
-			tax = strings.TrimPrefix(tax, "is ")
+			tax := v.Description[(pos - 5) : pos+1]
+			tax = strings.TrimSpace(tax)
 			tax = strings.TrimPrefix(tax, " is ")
 			tax = strings.TrimPrefix(tax, "is")
 			tax = strings.TrimPrefix(tax, " ")
@@ -88,5 +88,5 @@ func searchForTaxRate(zipCode string) (string, error) {
 		}
 	}
 
-	return "", errors.New("could not locate tax")
+	return "Zip Not found", errors.New("could not locate tax")
 }
