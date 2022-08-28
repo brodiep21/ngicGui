@@ -6,11 +6,15 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"github.com/brodiep21/ngicGui/search"
 	// "fyne.io/fyne/v2/theme"
-	// "fyne.io/fyne/v2/canvas"
+	// "bytes"
+	// "fmt"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	// "image/png"
+	// "io"
 	// "os"
 )
 
@@ -21,6 +25,7 @@ func main() {
 	zip := widget.NewEntry()
 	zip.SetPlaceHolder("Enter Zip")
 
+	//button fills zip placeholder
 	button := widget.NewButton("Get Zip", func() {
 		tax, err := search.SearchForTaxRate(zip.Text)
 		if err != nil {
@@ -29,7 +34,7 @@ func main() {
 			zip.SetText(tax)
 		}
 	})
-	button.MinSize()
+
 	//sets a system tray that will only close from the tray/toolbar if using a desktop
 	if desk, ok := a.(desktop.App); ok {
 		m := fyne.NewMenu("NGICapp",
@@ -38,14 +43,22 @@ func main() {
 			}))
 		desk.SetSystemTrayMenu(m)
 	}
-	// pic, err := os.ReadFile("positionstatement.PNG")
-	// if err != nil {
-	// 	fmt.Prinln(err)
-	// }
+
+	//create a canvas object from a file image
+	img := canvas.NewImageFromFile("positionstatement.PNG")
+
+	//main menu within same page
 	menu := container.NewGridWithRows(1,
 		container.NewGridWithColumns(2,
 			container.NewVBox(
-				widget.NewButton("1", func() {}),
+				widget.NewButton("Scan Position Statement", func() {
+					img.FillMode = canvas.ImageFillContain
+					win2 := a.NewWindow("Scans")
+					win2.SetContent(img)
+					win2.Resize(fyne.NewSize(550, 975))
+					win2.CenterOnScreen()
+					win2.Show()
+				}),
 				widget.NewButton("2", func() {}),
 				widget.NewButton("3", func() {}),
 				widget.NewButton("4", func() {}),
@@ -77,5 +90,7 @@ func main() {
 	win.SetCloseIntercept(func() {
 		win.Hide()
 	})
-	win.ShowAndRun()
+	win.SetMaster()
+	win.Show()
+	a.Run()
 }
