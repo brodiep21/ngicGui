@@ -2,7 +2,14 @@
 Working in tandem with ngic online app, determining which will be easier and cheaper for access.
 
 This app will:
-Postgresql
-google search tax rate or use a free api
-integrate VPN use on work computers
-integrate use of photos/pics and excel
+inegrate google search
+integrate data entry (looking for posgresql)
+integrate information from a spreadsheet excel database
+
+
+
+
+down the line roadmap   ----
+ - username and password setup for accounts that links data
+ - accesses entry's from a webpage via api or scraper to integrate data to formulate a faster MDS environment.
+ - setup the environment in a container if fyne does not work for certain computers on the VPN
