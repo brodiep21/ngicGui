@@ -4,15 +4,15 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"github.com/brodiep21/ngicGui/search"
-	// "fyne.io/fyne/v2/theme"
 	// "bytes"
-	// "fmt"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"log"
 	// "image/png"
 	// "io"
 	// "os"
@@ -44,21 +44,45 @@ func main() {
 		desk.SetSystemTrayMenu(m)
 	}
 
+	toolbar := widget.NewToolbar(
+		widget.NewToolbarAction(theme.DocumentCreateIcon(), func() {
+			log.Println("New document")
+		}),
+		widget.NewToolbarSeparator(),
+		widget.NewToolbarAction(theme.ContentAddIcon(), func() {}),
+		widget.NewToolbarAction(theme.FileIcon(), func() {}),
+		widget.NewToolbarAction(theme.ContentPasteIcon(), func() {}),
+		widget.NewToolbarSpacer(),
+		widget.NewToolbarAction(theme.HelpIcon(), func() {
+			log.Println("Display help")
+		}),
+	)
+	// l := widget.NewToolbar(
+	// 	widget.NewToolbarAction(theme.CheckButtonIcon(), func() {
+	// 		toolbar.
+	// 		log.Println("checked")
+	// 	}),
+	// )
+
 	//create a canvas object from a file image
 	img := canvas.NewImageFromFile("positionstatement.PNG")
 
 	//main menu within same page
-	menu := container.NewGridWithRows(1,
+	menu := container.NewGridWithRows(2,
+		container.NewVBox(
+			toolbar,
+			widget.NewButton("Scan Position Statement", func() {
+				img.FillMode = canvas.ImageFillOriginal
+				win2 := a.NewWindow("Scans")
+				win2.SetContent(img)
+				win2.Resize(fyne.NewSize(550, 975))
+				win2.CenterOnScreen()
+				win2.Show()
+			}),
+		),
 		container.NewGridWithColumns(2,
 			container.NewVBox(
-				widget.NewButton("Scan Position Statement", func() {
-					img.FillMode = canvas.ImageFillContain
-					win2 := a.NewWindow("Scans")
-					win2.SetContent(img)
-					win2.Resize(fyne.NewSize(550, 975))
-					win2.CenterOnScreen()
-					win2.Show()
-				}),
+
 				widget.NewButton("2", func() {}),
 				widget.NewButton("3", func() {}),
 				widget.NewButton("4", func() {}),
@@ -68,11 +92,6 @@ func main() {
 				widget.NewButton("8", func() {}),
 				widget.NewButton("9", func() {}),
 			),
-			// container.NewHBox(
-			// 	widget.NewButton("Hello", func() {}),
-			// 	widget.NewButton("Hello", func() {}),
-			// 	widget.NewButton("Hello", func() {}),
-			// ),
 			container.NewGridWithColumns(3,
 				layout.NewSpacer(),
 				container.NewVBox(
@@ -86,7 +105,7 @@ func main() {
 	// win.SetContent(hBox)
 	win.SetContent(menu)
 
-	//when using the X close button, the app is only closed and minimuzed to the tray
+	//when using the X close button, the app is only closed and minimized to the tray
 	win.SetCloseIntercept(func() {
 		win.Hide()
 	})
