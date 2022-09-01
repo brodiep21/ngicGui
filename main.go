@@ -41,6 +41,15 @@ func main() {
 			zip.SetText(tax)
 		}
 	})
+
+	entry := widget.NewEntry()
+
+	form := &widget.Form{
+		Items: []*widget.FormItem{
+			Text: "" //need database info
+
+		}
+	}
 	//top toolbar on the main page
 	toolbar := widget.NewToolbar(
 		widget.NewToolbarAction(theme.DocumentCreateIcon(), func() {
