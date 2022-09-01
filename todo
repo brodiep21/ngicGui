@@ -1,0 +1,18 @@
+1.) Implement enter key for zip search
+// func init() {
+
+// }
+// type myEntry struct {
+// 	widget.Entry
+// }
+
+// func (m *myEntry) HitShortcut(s fyne.Shortcut) {
+// 	if _, ok := s.(*desktop.CustomShortcut); !ok {
+// 		m.Entry.HitShortcut(s)
+// 		return
+// 	}
+// 	log.Println("Keyboard enter")
+// }
+// zip.TypedKey(fyne.KeyEnter, int(0x0D)
+// enter := &desktop.
+-------------------------------------------

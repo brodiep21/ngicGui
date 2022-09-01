@@ -1,44 +1,23 @@
 package main
 
 import (
+	"log"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/dialog"
-	"fyne.io/fyne/v2/theme"
-	"github.com/brodiep21/ngicGui/search"
-	// "bytes"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"log"
-	// "image/png"
-	// "io"
-	// "os"
+	"github.com/brodiep21/ngicGui/search"
 )
-
-func init() {
-
-}
 
 func main() {
 	a := app.New()
 
 	win := a.NewWindow("NGIC")
-
-	zip := widget.NewEntry()
-	zip.SetPlaceHolder("Enter Zip")
-
-	//button fills zip placeholder
-	button := widget.NewButton("Get Zip", func() {
-		tax, err := search.SearchForTaxRate(zip.Text)
-		if err != nil {
-			dialog.ShowError(err, win)
-		} else {
-			zip.SetText(tax)
-		}
-	})
 
 	//sets a system tray that will only close from the tray/toolbar if using a desktop
 	if desk, ok := a.(desktop.App); ok {
@@ -48,6 +27,20 @@ func main() {
 			}))
 		desk.SetSystemTrayMenu(m)
 	}
+	zip := widget.NewEntry()
+	zip.SetPlaceHolder("Enter Zip")
+
+	//button fills zip placeholder
+	button := widget.NewButton("Get Zip", func() {
+		log.Println("Keyboard enter")
+
+		tax, err := search.SearchForTaxRate(zip.Text)
+		if err != nil {
+			zip.SetText("Tax not found")
+		} else {
+			zip.SetText(tax)
+		}
+	})
 	//top toolbar on the main page
 	toolbar := widget.NewToolbar(
 		widget.NewToolbarAction(theme.DocumentCreateIcon(), func() {
@@ -63,6 +56,7 @@ func main() {
 		widget.NewToolbarAction(theme.ContentPasteIcon(), func() {}),
 		widget.NewToolbarSpacer(),
 		widget.NewToolbarAction(theme.HelpIcon(), func() {
+
 			log.Println("Display help")
 		}),
 	)
@@ -70,7 +64,7 @@ func main() {
 	//create a canvas object from a file image
 	img := canvas.NewImageFromFile("positionstatement.PNG")
 
-	//main menu within same page
+	//main menu on window open
 	menu := container.NewGridWithRows(2,
 		// container.NewBorder(
 		// 	top : layout.NewVBoxLayout(),
@@ -81,7 +75,7 @@ func main() {
 		// ),
 		container.NewGridWithColumns(2,
 			container.NewVBox(
-				// toolbar,
+				toolbar,
 				widget.NewButton("Scan Position Statement", func() {
 					img.FillMode = canvas.ImageFillOriginal
 					win2 := a.NewWindow("Scans")
