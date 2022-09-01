@@ -18,8 +18,13 @@ import (
 	// "os"
 )
 
+func init() {
+
+}
+
 func main() {
 	a := app.New()
+
 	win := a.NewWindow("NGIC")
 
 	zip := widget.NewEntry()
@@ -43,46 +48,48 @@ func main() {
 			}))
 		desk.SetSystemTrayMenu(m)
 	}
-
+	//top toolbar on the main page
 	toolbar := widget.NewToolbar(
 		widget.NewToolbarAction(theme.DocumentCreateIcon(), func() {
 			log.Println("New document")
 		}),
 		widget.NewToolbarSeparator(),
-		widget.NewToolbarAction(theme.ContentAddIcon(), func() {}),
+		widget.NewToolbarAction(theme.ContentAddIcon(), func() {
+
+		}),
+		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(theme.FileIcon(), func() {}),
+		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(theme.ContentPasteIcon(), func() {}),
 		widget.NewToolbarSpacer(),
 		widget.NewToolbarAction(theme.HelpIcon(), func() {
 			log.Println("Display help")
 		}),
 	)
-	// l := widget.NewToolbar(
-	// 	widget.NewToolbarAction(theme.CheckButtonIcon(), func() {
-	// 		toolbar.
-	// 		log.Println("checked")
-	// 	}),
-	// )
 
 	//create a canvas object from a file image
 	img := canvas.NewImageFromFile("positionstatement.PNG")
 
 	//main menu within same page
 	menu := container.NewGridWithRows(2,
-		container.NewVBox(
-			toolbar,
-			widget.NewButton("Scan Position Statement", func() {
-				img.FillMode = canvas.ImageFillOriginal
-				win2 := a.NewWindow("Scans")
-				win2.SetContent(img)
-				win2.Resize(fyne.NewSize(550, 975))
-				win2.CenterOnScreen()
-				win2.Show()
-			}),
-		),
+		// container.NewBorder(
+		// 	top : layout.NewVBoxLayout(),
+		// 	layout.NewSpacer(),
+		// 	layout.NewSpacer(),
+		// 	layout.NewSpacer(),
+
+		// ),
 		container.NewGridWithColumns(2,
 			container.NewVBox(
-
+				// toolbar,
+				widget.NewButton("Scan Position Statement", func() {
+					img.FillMode = canvas.ImageFillOriginal
+					win2 := a.NewWindow("Scans")
+					win2.SetContent(img)
+					win2.Resize(fyne.NewSize(550, 975))
+					win2.CenterOnScreen()
+					win2.Show()
+				}),
 				widget.NewButton("2", func() {}),
 				widget.NewButton("3", func() {}),
 				widget.NewButton("4", func() {}),
