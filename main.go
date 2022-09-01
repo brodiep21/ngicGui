@@ -8,7 +8,7 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
-	"fyne.io/fyne/v2/layout"
+	// "fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/brodiep21/ngicGui/search"
@@ -87,14 +87,14 @@ func main() {
 				widget.NewButton("2", func() {}),
 				widget.NewButton("3", func() {}),
 				widget.NewButton("4", func() {}),
-				widget.NewButton("5", func() {}),
-				widget.NewButton("6", func() {}),
-				widget.NewButton("7", func() {}),
-				widget.NewButton("8", func() {}),
-				widget.NewButton("9", func() {}),
+				// widget.NewButton("5", func() {}),
+				// widget.NewButton("6", func() {}),
+				// widget.NewButton("7", func() {}),
+				// widget.NewButton("8", func() {}),
+				// widget.NewButton("9", func() {}),
 			),
-			container.NewGridWithColumns(3,
-				layout.NewSpacer(),
+			container.NewHBox(
+				// layout.NewSpacer(),
 				container.NewVBox(
 					zip,
 					button,
