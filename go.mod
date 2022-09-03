@@ -4,6 +4,8 @@ go 1.19
 
 require (
 	fyne.io/fyne/v2 v2.2.3
+	github.com/gorilla/mux v1.8.0
+	github.com/lib/pq v1.10.6
 	github.com/rocketlaunchr/google-search v1.1.4
 )
 

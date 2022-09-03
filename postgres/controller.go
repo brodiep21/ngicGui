@@ -7,7 +7,6 @@ import (
 	"time"
 	"fmt"
 )
-
 type App struct {
 	Router *mux.Router
 	DB     *sql.DB
