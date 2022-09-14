@@ -19,46 +19,60 @@ type Labor struct {
 }
 
 func (l *Labor) getRateByZip(db *sql.DB) error {
-	return db.QueryRow("SELECT ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat FROM labor WHERE ZIP=$1", l.ZIP).Scan(&l.Zip, &l.County, &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat)
+	return db.QueryRow("SELECT ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat FROM labor WHERE ZIP=$1", l.Zip).Scan(&l.Zip, &l.County, &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat)
 }
 
-func (l *Labor) getRateByCounty(db *sql.DB) ([]Labor, error) {
+func (l *Labor) getRateByCounty(db *sql.DB, start, counter int) ([]Labor, error) {
 
-	rows, err := db.Query("SELECT ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat FROM labor WHERE County=$1", l.County).Scan(&l.Zip, &l.County, &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat)
+	rows, err := db.Query("SELECT ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat FROM labor WHERE County=$1", counter, start)
+	if err != nil {
+		return nil, err
+	}
 	defer rows.Close()
 
 	labors := []Labor{}
 
 	for rows.Next() {
-		var l labors
+		var l Labor
 		if err := rows.Scan(&l.Zip, &l.County, &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat); err != nil {
 			return nil, err
 		}
-		return labors, nil
+		labors = append(labors, l)
 	}
+	return labors, nil
 }
 
 func (l *Labor) updateRate(db *sql.DB) (string, error) {
-	result, err := db.Exec("UPDATE labor SET BodyRate=$1, PaintRate=$2, MechRate=$3, FrameRate=$4, PaintSupplies=$5, Createdat=$6 WHERE ZIP=$7", &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat, &l.Zip)
+	_, err := db.Exec("UPDATE labor SET BodyRate=$1, PaintRate=$2, MechRate=$3, FrameRate=$4, PaintSupplies=$5, Createdat=$6 WHERE ZIP=$7", &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat, &l.Zip)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return fmt.Sprintf("Successfully updated %s rates", l.Zip)
+	return fmt.Sprintf("Successfully updated %s rates", l.Zip), nil
 }
 
 func (l *Labor) createLabor(db *sql.DB) error {
-	result, err := db.QueryRow("INSERT INTO labor (ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", &l.Zip, &l.County, &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat)
+	_, err := db.Exec("INSERT INTO labor (ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", &l.Zip, &l.County, &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat)
 	if err != nil {
 		return err
 	}
+	return err
 }
 
-func (l *Labor) deleteLabor(db *sql.DB) error {
-	result, err := db.QueryRow("ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat WHERE ZIP=$1", l.Zip)
-	if err != nil {
-		return err
+func (l *Labor) deleteLabor(db *sql.DB) (Labor, error) {
+
+	lab := Labor{}
+	response := db.QueryRow("ZIP, County, BodyRate, PaintRate, MechRate, FrameRate, PaintSupplies, Createdat WHERE ZIP=$1", l.Zip)
+
+	if err := response.Scan(&l.Zip, &l.County, &l.BodyRate, &l.PaintRate, &l.MechRate, &l.FrameRate, &l.PaintSupplies, &l.Createdat); err != nil {
+		return Labor{}, nil
 	}
+	_, err := db.Exec("DELETE from labor WHERE ZIP=$1", l.Zip)
+	if err != nil {
+		return Labor{}, err
+	}
+
+	return lab, nil
 }
 
 // CREATE TABLE Labor (

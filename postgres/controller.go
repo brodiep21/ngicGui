@@ -40,7 +40,7 @@ func (a *App) Init(password string) error {
 	a.DB.SetConnMaxLifetime(20 * time.Second)
 
 	a.Router = mux.NewRouter()
-	a.InitRoutes()
+	// a.InitRoutes()
 	return nil
 
 }
@@ -69,4 +69,8 @@ func JsonResponse(w http.ResponseWriter, Rcode int, info interface{}) {
 
 // func (a *App) InitRoutes() {
 // 	a.Router.HandleFunc(path, f)
+// }
+
+// func (a *App) InitRoutes() {
+
 // }
